@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "ddfe0103-3e0f-4467-bac6-e21e16275e0e",
+		"name": "Exo1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48076348",
+		"_collection_link": "https://touriamina123-4839631.postman.co/workspace/Amina-Touri's-Workspace~76d30e64-26c3-4891-8746-779668e2e18c/collection/48076348-ddfe0103-3e0f-4467-bac6-e21e16275e0e?action=share&source=collection_link&creator=48076348"
+	},
+	"item": [
+		{
+			"name": "NewClient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//pm.test.skip(\"Body matches string\", function () {\r",
+							"    //pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");\r",
+							"//});\r",
+							"\r",
+							"// Teste si le code de réponse de l'API est 201 \r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"// Si le code de réponse est 201, on récupère les données renvoyées par l'API\r",
+							"if (pm.response.code === 201) {  \r",
+							"    var jsonData = pm.response.json();// On transforme le body en objet JSON\r",
+							"    pm.collectionVariables.set(\"NEWID\", jsonData.id); // Stocke l'ID du nouveau client dans une variable de collection\r",
+							"\r",
+							"    console.info(`Client créé avec ID : ${jsonData.id}`);\r",
+							"} else {\r",
+							"    console.info(\"Client non créé\");\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"firstname\", jsonData.firstname);\r",
+							"pm.collectionVariables.set(\"lastname\", jsonData.lastname);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastname\": \"{{$randomLastName}}\",\r\n    \"firstname\": \"{{$randomFirstName}}\",\r\n    \"address\": {\r\n        \"numStreet\": 15,\r\n        \"streetName\": \"{{$randomStreetName}}\",\r\n        \"postalCode\": \"75001\",\r\n        \"city\": \"{{$randomCity}}\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{PP}}.mockapi.io/testapi/api/v1/clients",
+					"protocol": "https",
+					"host": [
+						"{{PP}}",
+						"mockapi",
+						"io"
+					],
+					"path": [
+						"testapi",
+						"api",
+						"v1",
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetClientById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Vérifie que le client récupéré correspond au client créé\r",
+							"pm.test(\"Vérifie les informations du client\", function() {\r",
+							"    var jsonData = pm.response.json(); \r",
+							"\r",
+							"    pm.expect(jsonData.firstname).to.eql(pm.collectionVariables.get(\"firstname\"));\r",
+							"    pm.expect(jsonData.lastname).to.eql(pm.collectionVariables.get(\"lastname\"));\r",
+							"\r",
+							"    console.info(\"Client trouvé avec ID : \" + pm.collectionVariables.get(\"NEWID\"));\r",
+							"    console.info(\"Nom complet : \" + jsonData.lastname + \" \" + jsonData.firstname);\r",
+							"    console.info(`Adresse : ${jsonData.address.numStreet} ${jsonData.address.streetName}, ${jsonData.address.postalCode} ${jsonData.address.city}`);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{PP}}.mockapi.io/testapi/api/v1/clients/{{NEWID}}",
+					"protocol": "https",
+					"host": [
+						"{{PP}}",
+						"mockapi",
+						"io"
+					],
+					"path": [
+						"testapi",
+						"api",
+						"v1",
+						"clients",
+						"{{NEWID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "city",
+			"value": ""
+		},
+		{
+			"key": "NEWID",
+			"value": ""
+		},
+		{
+			"key": "firstname",
+			"value": ""
+		},
+		{
+			"key": "lastname",
+			"value": ""
+		}
+	]
+}
