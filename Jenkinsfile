@@ -10,7 +10,7 @@ pipeline {
 
         stage('Run Postman Collection') {
             steps {
-                bat 'newman run Exo1.postman_collection.json -e PP.postman_environment(1).json'
+                bat '"C:\\Users\\expert info\\AppData\\Roaming\\npm\\newman.cmd" run Exo1.postman_collection.json -e PP.postman_environment(1).json'
             }
         }
     }
