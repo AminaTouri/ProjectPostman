@@ -10,7 +10,8 @@ pipeline {
 
         stage('Run Postman Collection') {
             steps {
-			bat '"C:\\Users\\expert info\\AppData\\Roaming\\npm\\newman.cmd" run "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Exo1_Postman_Pipeline\\Exo1.postman_collection.json" -e "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Exo1_Postman_Pipeline\\PP.postman_environment.json"'
+                // Utilise %WORKSPACE% pour pointer vers les fichiers dans le workspace
+                bat '"C:\\Users\\expert info\\AppData\\Roaming\\npm\\newman.cmd" run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\PP.postman_environment.json"'
             }
         }
     }
