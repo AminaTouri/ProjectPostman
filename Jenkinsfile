@@ -25,10 +25,10 @@ pipeline {
 
         stage('Run Postman Collection') {
             steps {
-                    Sh """
-                    npx newman run "$collections/Exo1.postman_collection.json" \
+                    sh """
+                    npx newman run "${WORKSPACE}/Exo1.postman_collection.json" \
                     -r cli,htmlextra \
-                    --reporter-htmlextra-export "$newman/Exo1.html" 
+                    --reporter-htmlextra-export "${WORKSPACE}/Exo1.html"
                     """
                 
             }
