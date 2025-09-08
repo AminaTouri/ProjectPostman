@@ -25,22 +25,12 @@ pipeline {
 
         stage('Run Postman Collection') {
             steps {
-                script {
-                    // Construire l'URL selon l'environnement choisi
-                    def baseUrl = "https://${params.ENV}.mockapi.io/testapi/api/v1/clients"
-
-                    // Afficher l'environnement et l'URL pour debug
-                    echo "Environnement choisi: ${params.ENV}"
-                    echo "URL utilisée pour Newman: ${baseUrl}"
-
-                    // Exécution de Newman
                     Sh """
                     npx newman run "$collections/Exo1.postman_collection.json" \
-                    -r cli,htmlextra,junit \
-                    --reporter-htmlextra-export "$newman/Exo1.html" \
-                    --reporter-junit-export     "$newman/Exo1.xml"
+                    -r cli,htmlextra \
+                    --reporter-htmlextra-export "$newman/Exo1.html" 
                     """
-                }
+                
             }
         }
     }
