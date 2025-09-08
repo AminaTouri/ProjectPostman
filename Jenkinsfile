@@ -1,8 +1,10 @@
 pipeline {
     agent any
+
     triggers {
-    cron('55 12 * * *')  // Tous les jours à 12:55 (heure du serveur Jenkins)
-}
+        cron('59 12 * * *')  // Tous les jours à 12:55 (heure du serveur Jenkins)
+    }
+
     parameters {
         choice(
             name: 'ENV',
@@ -48,14 +50,19 @@ pipeline {
             ])
 
             // Envoi du mail avec le rapport en pièce jointe
-            mail bcc: '',
-                 body: "Bonjour,\n\nLe build ${env.JOB_NAME} #${env.BUILD_NUMBER} est terminé.\nVeuillez trouver le rapport Newman en pièce jointe.",
-                 cc: '',
-                 from: 'jenkins@example.com',
-                 replyTo: 'jenkins@example.com',
-                 subject: "Rapport Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 to: 'touriamina123@gmail.com',
-                 attachLog: true
+            mail(
+                to: 'touriamina123@gmail.com',
+                subject: "Rapport Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """Bonjour,
+
+Le build ${env.JOB_NAME} #${env.BUILD_NUMBER} est terminé.
+
+Vous pouvez consulter le rapport Newman en pièce jointe ou via Jenkins : ${env.BUILD_URL}
+
+Cordialement.""",
+                from: 'jenkins@example.com',
+                attachments: 'newman-report.html'
+            )
         }
 
         failure {
