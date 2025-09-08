@@ -35,7 +35,6 @@ pipeline {
                     // Exécution de Newman avec environnement inline
                     bat """
                     npx newman run "Exo1.postman_collection.json" ^
-                    -e "{ \\"values\\": [ { \\"key\\": \\"PP\\", \\"value\\": \\"${baseUrl}\\", \\"enabled\\": true } ] }" ^
                     -r htmlextra ^
                     --reporter-htmlextra-export "newman-report.html"
                     """
