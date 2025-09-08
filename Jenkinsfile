@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                     def baseUrl = "https://${params.ENV}.mockapi.io/testapi/api/v1/clients"
-                    // Exécution Newman sur une seule ligne correctement formée
+                    // Exécution Newman avec URL dynamique injectée dans l'environnement inline
                     bat """
                     npx newman run "Exo1.postman_collection.json" ^
                     -e "{ \\"values\\": [ { \\"key\\": \\"PP\\", \\"value\\": \\"${baseUrl}\\", \\"enabled\\": true } ] }" ^
