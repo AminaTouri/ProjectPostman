@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     triggers {
-        cron('20 13 * * *')  //
+        cron('20 13 * * *')  // Tous les jours à 13:20
     }
+
     tools {
         nodejs 'Node24' 
     }
@@ -23,16 +24,17 @@ pipeline {
             }
         }
 
-       stage('Run Postman Collection') {
-    steps {
-        script {
-            echo "Environnement choisi: ${params.ENV}"
-            bat """
-            npx newman run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\${params.ENV}.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export "%WORKSPACE%\\Exo1.html"
-            """
+        stage('Run Postman Collection') {
+            steps {
+                script {
+                    echo "Environnement choisi: ${params.ENV}"
+                    bat """
+                    npx newman run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\${params.ENV}.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export "%WORKSPACE%\\newman-report.html"
+                    """
+                }
+            }
         }
     }
-}
 
     post {
         always {
