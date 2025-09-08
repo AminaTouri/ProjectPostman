@@ -26,10 +26,14 @@ pipeline {
             steps {
                 script {
                     def baseUrl = "https://${params.ENV}.mockapi.io/testapi/api/v1/clients"
-                    // Commande bat sur une seule ligne, guillemets échappés correctement
-                    nodejs('NODEJS24'){
-                    bat "npx --yes --package newman --package newman-reporter-htmlextra newman run \"%WORKSPACE%\\\\Exo1.postman_collection.json\" -e \"{ \\\"values\\\": [ { \\\"key\\\": \\\"PP\\\", \\\"value\\\": \\\"${baseUrl}\\\", \\\"enabled\\\": true } ] }\" -r htmlextra --reporter-htmlextra-export \"%WORKSPACE%\\\\newman-report.html\" || exit 0"
-                }}
+                    // Exécution Newman sur une seule ligne correctement formée
+                    bat """
+                    npx newman run "Exo1.postman_collection.json" ^
+                    -e "{ \\"values\\": [ { \\"key\\": \\"PP\\", \\"value\\": \\"${baseUrl}\\", \\"enabled\\": true } ] }" ^
+                    -r htmlextra ^
+                    --reporter-htmlextra-export "newman-report.html" || exit 0
+                    """
+                }
             }
         }
     }
