@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     triggers {
-        cron('04 13 * * *')  // Tous les jours à 12:55 (heure du serveur Jenkins)
+        cron('20 13 * * *')  //
     }
 
     parameters {
