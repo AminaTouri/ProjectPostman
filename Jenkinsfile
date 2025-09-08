@@ -16,11 +16,6 @@ pipeline {
             }
         }
 
-        stage('Install Newman & Reporter') {
-            steps {
-                bat 'npm install -g newman newman-reporter-htmlextra'
-            }
-        }
 
         stage('Run Postman Collection') {
             steps {
