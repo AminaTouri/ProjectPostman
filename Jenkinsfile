@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     triggers {
-        cron('59 12 * * *')  // Tous les jours à 12:55 (heure du serveur Jenkins)
+        cron('04 13 * * *')  // Tous les jours à 12:55 (heure du serveur Jenkins)
     }
 
     parameters {
@@ -30,7 +30,7 @@ pipeline {
                     echo "Environnement choisi: ${params.ENV}"
                     echo "URL utilisée pour Newman: ${baseUrl}"
 
-                    // Exécution de Newman avec environnement inline
+                    // Exécution de Newman
                     bat '"C:\\Users\\EXPERT~1\\AppData\\Roaming\\npm\\newman.cmd" run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\PP.postman_environment.json" -r htmlextra --reporter-htmlextra-export "%WORKSPACE%\\newman-report.html"'
                 }
             }
@@ -49,8 +49,8 @@ pipeline {
                 reportName: 'Newman HTML Report'
             ])
 
-            // Envoi du mail avec le rapport en pièce jointe
-            mail(
+            // Envoi du mail avec le rapport en pièce jointe via Email Extension
+            emailext(
                 to: 'touriamina123@gmail.com',
                 subject: "Rapport Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """Bonjour,
@@ -60,13 +60,11 @@ Le build ${env.JOB_NAME} #${env.BUILD_NUMBER} est terminé.
 Vous pouvez consulter le rapport Newman en pièce jointe ou via Jenkins : ${env.BUILD_URL}
 
 Cordialement.""",
-                from: 'jenkins@example.com',
-                attachments: 'newman-report.html'
+                attachmentsPattern: 'newman-report.html'
             )
         }
 
         failure {
-            // Message clair si certaines requêtes échouent
             echo 'Certaines requêtes Newman ont échoué. Vérifie le rapport HTML pour les détails.'
         }
     }
