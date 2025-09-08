@@ -23,15 +23,16 @@ pipeline {
             }
         }
 
-        stage('Run Postman Collection') {
-            steps {
-                    bat """
-                    npx newman run "%WORKSPACE%\\Exo1.postman_collection.json" -r cli,htmlextra --reporter-htmlextra-export "%WORKSPACE%\\Exo1.html"
-                    """
-
-            }
+       stage('Run Postman Collection') {
+    steps {
+        script {
+            echo "Environnement choisi: ${params.ENV}"
+            bat """
+            npx newman run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\${params.ENV}.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export "%WORKSPACE%\\Exo1.html"
+            """
         }
     }
+}
 
     post {
         always {
