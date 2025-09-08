@@ -4,6 +4,9 @@ pipeline {
     triggers {
         cron('20 13 * * *')  //
     }
+    tools {
+        nodejs 'Node24' 
+    }
 
     parameters {
         choice(
@@ -31,7 +34,12 @@ pipeline {
                     echo "URL utilisée pour Newman: ${baseUrl}"
 
                     // Exécution de Newman
-                    bat '"C:\\Users\\EXPERT~1\\AppData\\Roaming\\npm\\newman.cmd" run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\PP.postman_environment.json" -r htmlextra --reporter-htmlextra-export "%WORKSPACE%\\newman-report.html"'
+                    Sh """
+                    npx newman run "$collections/Exo1.postman_collection.json" \
+                    -r cli,htmlextra,junit \
+                    --reporter-htmlextra-export "$newman/Exo1.html" \
+                    --reporter-junit-export     "$newman/Exo1.xml"
+                    """
                 }
             }
         }
