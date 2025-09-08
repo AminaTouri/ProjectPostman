@@ -33,12 +33,7 @@ pipeline {
                     echo "URL utilisée pour Newman: ${baseUrl}"
 
                     // Exécution de Newman avec environnement inline
-                    bat """
-                    npx newman run "Exo1.postman_collection.json" ^
-                    -e PP.postman_environment.json ^
-                    -r htmlextra ^
-                    --reporter-htmlextra-export "newman-report.html"
-                    """
+                     bat '"C:\\Users\\EXPERT~1\\AppData\\Roaming\\npm\\newman.cmd" run "%WORKSPACE%\\Exo1.postman_collection.json" -e "%WORKSPACE%\\PP.postman_environment.json"'
                 }
             }
         }
