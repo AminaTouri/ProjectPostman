@@ -25,13 +25,19 @@ pipeline {
         stage('Run Postman Collection') {
             steps {
                 script {
+                    // Construire l'URL selon l'environnement choisi
                     def baseUrl = "https://${params.ENV}.mockapi.io/testapi/api/v1/clients"
-                    // Exécution Newman avec URL dynamique injectée dans l'environnement inline
+
+                    // Afficher l'environnement et l'URL pour debug
+                    echo "Environnement choisi: ${params.ENV}"
+                    echo "URL utilisée pour Newman: ${baseUrl}"
+
+                    // Exécution de Newman avec environnement inline
                     bat """
                     npx newman run "Exo1.postman_collection.json" ^
                     -e "{ \\"values\\": [ { \\"key\\": \\"PP\\", \\"value\\": \\"${baseUrl}\\", \\"enabled\\": true } ] }" ^
                     -r htmlextra ^
-                    --reporter-htmlextra-export "newman-report.html" || exit 0
+                    --reporter-htmlextra-export "newman-report.html"
                     """
                 }
             }
@@ -40,6 +46,7 @@ pipeline {
 
     post {
         always {
+            // Publication du rapport HTML
             publishHTML(target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
@@ -50,6 +57,7 @@ pipeline {
             ])
         }
         failure {
+            // Message clair si certaines requêtes échouent
             echo 'Certaines requêtes Newman ont échoué. Vérifie le rapport HTML pour les détails.'
         }
     }
